@@ -236,6 +236,10 @@ class MetaLearner:
                     #For MuJoCo, the reward is in real value
                     else:
                         rew_raw[mixture_index] = rew_pred.clone()
+                        rew_raw_np = rew_raw.cpu().numpy()
+                        rew_normalised = self.envs.venv._rewfilt2(rew_raw_np)
+                        rew_normalised = torch.from_numpy(rew_normalised)[:, 0].unsqueeze(dim=1).float().to(device)
+                        
 
                 # compute next embedding (for next loop and/or value prediction bootstrap)
                 latent_sample, latent_mean, latent_logvar, hidden_state = utl.update_encoding(encoder=self.vae.encoder,
