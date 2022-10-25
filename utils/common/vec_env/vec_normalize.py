@@ -62,6 +62,10 @@ class VecNormalize(VecEnvWrapper):
         rews_norm = np.clip(rews / np.sqrt(self.ret_rms.var + self.epsilon), -self.cliprew, self.cliprew)
         return [rews, rews_norm]
 
+    def _rewfilt2(self, rews): #used to normalise reward without updating
+        rews_norm = np.clip(rews / np.sqrt(self.ret_rms.var + self.epsilon), -self.cliprew, self.cliprew)
+        return rews_norm
+    
     def reset_mdp(self, index=None):
         if index is None:
             obs = self.venv.reset_mdp()
